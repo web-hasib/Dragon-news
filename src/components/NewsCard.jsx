@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaRegBookmark, FaShareAlt, FaStar, FaEye } from 'react-icons/fa';
 import { format } from 'date-fns';
+import { Link } from 'react-router';
 
 const NewsCard = ({ news }) => {
   const {
@@ -10,8 +11,7 @@ const NewsCard = ({ news }) => {
     details,
     rating,
     total_view,
-    tags,
-    others,
+    id
   } = news;
 
   return (
@@ -36,7 +36,7 @@ const NewsCard = ({ news }) => {
         <p className="text-sm text-accent mb-2">
           {details.length > 200 ? `${details.slice(0, 200)}...` : details}
         </p>
-        <a href="#" className="text-orange-300 font-semibold">Read More</a>
+        <Link to={`/news-details/${id}`} className="text-orange-300 font-semibold">Read More</Link>
       </div>
 
       <div className="flex justify-between items-center p-4 border-t  border-gray-100 border-dashed">
