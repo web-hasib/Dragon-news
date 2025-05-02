@@ -1,9 +1,11 @@
-import React, { use } from 'react';
-import { Link } from 'react-router';
+import React, { use, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { AuthContext } from '../provider/AuthProvider';
 
 const Register = () => {
-  const {createUser,setUser} =use(AuthContext)
+  const {createUser,setUser,updateUser} =use(AuthContext)
+  const [nameError, setNameError] = useState('')
+  const navigate = useNavigate()
 
 
 
@@ -11,16 +13,33 @@ const Register = () => {
     e.preventDefault()
     const form= e.target;
     const name = form.name.value;
+    if(name.length < 5){
+      setNameError('Name should be more then 5 char')
+      return
+    }
+    else{
+      setNameError('')
+    }
     const image = form.image.value;
     const email = form.email.value;
     const password = form.password.value;
-    console.log('clicked',name,image,email,password);
+    // console.log('clicked',name,image,email,password);
     createUser(email,password).then((res)=>{
-      // console.log(res.user);
-      setUser(res.user)
+      const user = res.user
+      // console.log(user);
+      updateUser({displayName: name , photoURL: image}).then(()=>{
+        // setUser(user)
+        setUser({...user,displayName: name , photoURL: image })
+        navigate('/')
+      })
+      .catch((error)=>{
+        console.log(error);
+        setUser(user)
+      })
+      // setUser(user)
     }).catch((error)=>{
       alert(error.message);
-    })
+    });
 
   }
     return (
@@ -40,6 +59,7 @@ const Register = () => {
               placeholder="Your Name"
               required
               />
+              {nameError && <p className='text-xs text-red-500'>{nameError}</p>}
               {/* img url  */}
             <label className="label">Photo URL</label>
             <input

@@ -13,7 +13,7 @@ const NewsDetails = () => {
         const newsDetails = data.find((single)=>single.id == id);
         setNews(newsDetails)
     },[data,id])
-    console.log(news);
+    // console.log(news);
     return (
         <div>
            <header>
